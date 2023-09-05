@@ -12,6 +12,10 @@
 * Sudoku Solver: Create a program that can solve Sudoku puzzles. Allow users to input the puzzle or load it from a file, and implement a backtracking algorithm to find the solution.
 * Battleship Game: Build a console-based version of the classic game Battleship. Create a two-player game where each player strategically places their ships and takes turns guessing the location of the opponent's ships.
 * Text-based RPG: Develop a text-based role-playing game (RPG) where players can create characters, explore a virtual world, engage in battles, and level up their characters. Implement features like character stats, inventory management, and enemy encounters.
+* Something with sockets or web sockets.
+* Implement HTTP2
+* Implement TCP.
+* Implement UDP.
 * Web Scraper: Create a program that extracts data from websites. Use a library like libcurl to fetch web pages, parse HTML or XML content, and extract specific information such as headlines, product details, or weather data.
 * Music Player: Build a simple music player application that can play audio files. Implement features like play, pause, stop, volume control, and playlist management. You can use libraries like SDL or SFML for audio playback.
 * Chat Application: Develop a client-server chat application where multiple users can communicate with each other in real-time. Implement features like private messaging, group chats, and online user status.
