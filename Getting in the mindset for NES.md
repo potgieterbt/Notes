@@ -1,5 +1,6 @@
 Actual data from memory is only ever uint_8
 Addresses are always uint_16, except for Zero page
+// Need to figure out how the stack and stack pointer works.
 
 For all but immediate addressing:
 1. Read address from pc and pc+1
