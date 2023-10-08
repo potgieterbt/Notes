@@ -9,11 +9,12 @@ For all but immediate addressing:
 3. Read data from the address
 
 TODO:
-* Implement all CPU instructions. (Almost done)
+* Implement all CPU instructions. (done i think)
 	* Need to figure out cycles for instructions.
 	* Implement Reset function. (https://bugzmanov.github.io/nes_ebook/chapter_3_2.html)
-* Implement status byte functionality.
-* Figure out the bus.
+* Implement status byte functionality. (done i think)
+* Figure out the bus. (maybe done)
+* Implement cartridge functionality. (half done)
 * Figure out some Mappers to be able to play games (ROM, Mapper 0).
 * Figure out the PPU
 * Scrolling.
