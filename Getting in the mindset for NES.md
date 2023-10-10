@@ -3,7 +3,9 @@ Addresses are always uint_16, except for Zero page
 // Need to figure out how the stack and stack pointer works.
 
 I need to figure out how to initialise each element of the system:
-* 
+* figure out what each element belongs to. (i.e. cpu, ppu, emulator as a whole)
+* if there is a limited amount of the element that can exist.
+* what the starting point is. (the cpu, the bus, or the emulator -> need to create a emu class)
 
 For all but immediate addressing:
 1. Read address from pc and pc+1
