@@ -9,10 +9,10 @@ I need to figure out how to initialise each element of the system:
 
 SimpleNES:
 * I'll probably do this way.
-*  
+* ROM gets defined, then mapper is defined, then the PPU and then initialise the CPU by passing all the previous as arguments to the constructor. 
 
 MedNES:
-*  
+* There is a emulator class and the other elements belong to 
 * 
 
 For all but immediate addressing:
