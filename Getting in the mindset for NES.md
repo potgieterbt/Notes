@@ -8,6 +8,7 @@ I need to figure out how to initialise each element of the system:
 * what the starting point is. (the cpu, the bus, or the emulator -> need to create a emu class
 
 SimpleNES:
+* I'll probably do this way.
 *  
 
 MedNES:
