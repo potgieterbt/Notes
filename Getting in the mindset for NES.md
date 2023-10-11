@@ -8,12 +8,14 @@ I need to figure out how to initialise each element of the system:
 * what the starting point is. (the cpu, the bus, or the emulator -> need to create a emu class
 
 SimpleNES:
-* I'll probably do this way.
-* ROM gets defined, then mapper is defined, then the PPU and then initialise the CPU by passing all the previous as arguments to the constructor. 
+* There is a emulator class and the other elements belong to.
+* Emu class is derived from cpu and ppu.
+* CPU takes a bus as an argument to constructor.
+* Mapper takes a cartridge as an argument.
 
 MedNES:
-* There is a emulator class and the other elements belong to 
-* 
+*  I'll probably do this way.
+* ROM gets defined, then mapper is defined, then the PPU and then initialise the CPU by passing all the previous as arguments to the constructor. 
 
 For all but immediate addressing:
 1. Read address from pc and pc+1
