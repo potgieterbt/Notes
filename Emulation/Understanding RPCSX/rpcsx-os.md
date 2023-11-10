@@ -11,7 +11,10 @@ main.cpp:
 		* Checks if isSystem is set.
 		* Checks if override is set -> [[rpcsx-os#^b79c1d | rx::linker::override]]
 		* Checks if audio should be enabled.
-	* Initialize 
+	* Initialize thread -> [[rpcsx-os#^a46390| rx::thread::initialize]]
+	* Initialize VM -> [[rpcsx-os#^64a2ab | rx::vm::initialize]]
+	* Run rpcsxgpu -> [[rpcsx-os#^736eb6 | runRpsxGpu]]
+	* If audio enabled setup audio in orbis kernel
 
 
 
@@ -20,3 +23,9 @@ rx::vfs::initialize ^2dc507
 rx::vfs::mount ^44c921
 
 rx::linker::override ^b79c1d
+
+rx::thread::initialize ^a46390
+
+rx::vm::initialize ^64a2ab
+
+runRpsxGpu ^736eb6
