@@ -1,7 +1,10 @@
-- [x] RAM
-- [x] Cooler
-- [x] SSD
-- [ ] GPU (rx 6800 xt, 3080), (rx 6700 xt, 3060 ti), (rx 7700 xt, 4070)
-- [ ] PSU
-- [ ] Case
-- [ ] Motherboard (AM5, ROG STRIX B650E-F , ASUS ROG Strix Z490-G, MSI B650) + CPU (AM5, 7600x) + RAM (Gen 5, 16GB @ 6000MHz)
+- [x] RAM - crutial 16GB 3200MHz
+- [ ] RAM - Crutial 16GB 3200MHz
+- [x] Cooler - Thermalright periless assassin 120
+- [x] SSD - Crutial Black 1TB
+- [ ] GPU - rx 6800 xt
+- [x] PSU - corsair 850x
+- [x] Case - NZXT H5 Flow
+- [ ] CPU - 5800x3D
+- [ ] Motherboard - AM4
+- [ ] Motherboard (AM5, ROG STRIX B650E-F , ASUS ROG Strix Z490-G, MSI B650) + CPU (AM5, 7600x, 7800x3D) + RAM (Gen 5, 16GB @ 6000MHz)
