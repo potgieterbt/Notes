@@ -32,6 +32,7 @@ main.cpp:
 				* Sets pageFlags to the value loaded from the cachedPages vector at index page using relaxed memory ordering.
 				* Sets address to the uint64_t cast of page multiplied by the [[amdgpu#^aad6ea | amd::bridge::kHostPageSize]]
 				* Sets origVmProt (original VM protection?) to [[rpcsx-os#^e2ef34 | rx::vm::getPageProtection]](address)
+				* 
 
 
 
