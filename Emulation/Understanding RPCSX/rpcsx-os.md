@@ -15,6 +15,9 @@ main.cpp:
 	* Initialize VM -> [[rpcsx-os#^64a2ab | rx::vm::initialize]]
 	* Run rpcsxgpu -> [[rpcsx-os#^736eb6 | runRpsxGpu]]
 	* If audio enabled setup audio in orbis kernel
+	* [[orbis-kernel#^9299ff | Allocate]] a Pid and [[orbis-kernel#^71bb1a | create]] a process for Pid <- depends on if isRoot is set.
+	* Start a thread that does:
+		* 
 
 
 
