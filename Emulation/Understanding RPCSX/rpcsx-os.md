@@ -32,7 +32,17 @@ main.cpp:
 				* Sets pageFlags to the value loaded from the cachedPages vector at index page using relaxed memory ordering.
 				* Sets address to the uint64_t cast of page multiplied by the [[amdgpu#^aad6ea | amd::bridge::kHostPageSize]]
 				* Sets origVmProt (original VM protection?) to [[rpcsx-os#^e2ef34 | rx::vm::getPageProtection]](address)
-				* 
+				* Check if need to set protect read -> PROT_READ.
+				* Check if need to set proctect write -> PROT_WRITE.
+				* Check if need to set protect execute -> PROT_EXEC.
+				* Check if amd readwrite lock.
+				* Check if amd write lock.
+				* Try to update memory protection with mprotect if failed abort.
+				* Clear fetchedCommands.
+				* Then detach thread.
+	* Set status to 0.
+	* initProcess
+	* mainThread
 
 
 
