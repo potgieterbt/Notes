@@ -43,6 +43,7 @@ main.cpp:
 	* Set status to 0.
 	* initProcess
 	* mainThread
+	* 
 
 
 
