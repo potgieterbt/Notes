@@ -22,6 +22,11 @@ For all but immediate addressing:
 2. Read address from the address (Optional)
 3. Read data from the address
 
+PPU:
+* Screen (256x240) is split into 8x8 pixel bitmap.
+* 8 palette tables, each has 3 indexable colours.
+* Attribute tables are the screen split into 2x2.
+
 TODO:
 * Implement all CPU instructions. (done i think)
 	* Need to figure out cycles for instructions.
