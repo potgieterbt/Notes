@@ -19,7 +19,7 @@ Read/Write done by CPU:
 *  
 
 Pattern Tables:
-
+* 
 
 Nametables:
 * 1024 byte area of memory lays out background.
