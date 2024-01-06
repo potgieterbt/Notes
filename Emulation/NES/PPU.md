@@ -8,6 +8,13 @@ Registers:
 	* Bit 5: Sprite size: (0: 8x8 pixels; 1: 8x16 pixels)
 	* Bit 6: PPU master/slave select: (0: read backdrop from EXT pins; 1: output color on EXT pins)
 	* Bit 7: Generate NMI at start of V-Blank interval: (0: off; 1: on)
+
+	* If PPU is in V-Blank and PPUSTATUS($2002) vblank flag is set, changing NMI flag from 0 to 1 will immediately generate a NMI, can result in graphical errors, to avoid can read $2002 immediately to clear vblank flag before writing $2000 to enable NMI.
+	* Master/Slave mode & EXT pins:
+		* When bit 6 is clear(usual), PPU gets palette index for background color from EXT pins. Stock NES grounds these pins making palette index 0 the background color as expected. Secondary picture generator connected to the EXT pins would be able to replace the background with different image using colors from background palette, could be used e.g. implement parallax scrolling.
+		* Setting bit 6 causes PPU to output the lower 4 bits of the palette memory index on the EXT pins for each pixel, since only 4 bits are output background and sprite pixels can't normally be distinguished this way. As EXT pins are grounded on the unmodded NES, setting bit 6 is discouraged as it could damage chip whenever it outputs a non-zero pixel value.
+	* Bit 0 race condition:
+		* Be careful when writing to register when outside of V-Blank if using vertical mirroring or 4-screen VRAM, when write starts on dot 257 will cause only the next scanline to be drawn from left nametable 
 * Mask:
 	* 
 * Status:
