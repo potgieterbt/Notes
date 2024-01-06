@@ -14,9 +14,19 @@ Registers:
 		* When bit 6 is clear(usual), PPU gets palette index for background color from EXT pins. Stock NES grounds these pins making palette index 0 the background color as expected. Secondary picture generator connected to the EXT pins would be able to replace the background with different image using colors from background palette, could be used e.g. implement parallax scrolling.
 		* Setting bit 6 causes PPU to output the lower 4 bits of the palette memory index on the EXT pins for each pixel, since only 4 bits are output background and sprite pixels can't normally be distinguished this way. As EXT pins are grounded on the unmodded NES, setting bit 6 is discouraged as it could damage chip whenever it outputs a non-zero pixel value.
 	* Bit 0 race condition:
-		* Be careful when writing to register when outside of V-Blank if using vertical mirroring or 4-screen VRAM, when write starts on dot 257 will cause only the next scanline to be drawn from left nametable 
+		* Be careful when writing to register when outside of V-Blank if using vertical mirroring or 4-screen VRAM, when write starts on dot 257 will cause only the next scanline to be drawn from left nametable → can cause visible glitch, can also interfere with sprite 0 hit for scanline. Glitch has no effect in horizontal or 1-screen mirroring. Only writes that start on dot 257 and continue through dot 258 can cause glitch; any other horizontal timing is safe. Glitch specifically writes value of open but to reg, which will almost always be the upper byte of the address. Writing to the reg or mirror of reg at $2100 according to desired nametable appears to be a functional workaround.
 * Mask:
-	* 
+	* Bit 0:
+	* Bit 1:
+	* Bit 2: 
+	* Bit 3: 
+	* Bit 4: 
+	* Bit 5: 
+	* Bit 6: 
+	* Bit 7: 
+
+
+
 * Status:
 * OAM address:
 * OAM data:
