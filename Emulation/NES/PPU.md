@@ -1,6 +1,7 @@
 Registers:
 * Controller:
-	* Bit 0-1: Base nametable address: (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00) 
+	* Bit 0-1: Base nametable address: (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)
+		* Are the most significant bits of the scrolling coordinates, a.k.a. when reached the end of a nametable, must switch to the next one → changing nametable address.
 	* Bit 2: VRAM address increment per CPU read/write of PPUDATA: (0: add 1, going across; 1: add 32, going down)
 	* Bit 3: Sprite pattern table for 8x8 sprites: (0: $0000; 1: $1000; ignored in 8x16 mode)
 	* Bit 4: Background pattern table address: (0: $0000; 1: $1000)
