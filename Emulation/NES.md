@@ -12,4 +12,5 @@ If the latch is set to LOW, the lower 8 bits  of the temporary address register 
 
 Additionally, when PPUSTATUS is read, the latch is set to HIGH. Games will (usually?) read from PPUSTATUS first to reset the latch before writing a new address to PPUADDR. 
 
-[[Emulation/NES/6502|6502]]
+[[6502]]
+[[PPU]]

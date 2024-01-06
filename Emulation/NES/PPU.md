@@ -54,10 +54,26 @@ Registers:
 	* OAMADDR precautions:
 		* 
 * OAM data:
+	* 
+	* **DO NOT write directly to this register in most cases.**
+	* 
 * Scroll:
+	* 
 * Address:
+	* a
+	* NOTE:
+		* Access to PPUSCROLL and PPUADDR during screen refresh produces interesting raster effects; starting position of each scanline can be set to any pixel position in nametable memory, see [PPU scrolling](https://www.nesdev.org/wiki/PPU_scrolling).
+	* Palette corruption:
+		* a
+	* Bus conflict:
+		* 
 * Data:
-* OAM DMA
+	* a
+	* PPUDATA read buffer (post-fetch):
+		* a
+	* Read conflict with DPCM samples:
+		* 
+* OAM DMA:
 
 Drawing:
 *  
