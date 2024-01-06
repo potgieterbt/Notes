@@ -16,24 +16,48 @@ Registers:
 	* Bit 0 race condition:
 		* Be careful when writing to register when outside of V-Blank if using vertical mirroring or 4-screen VRAM, when write starts on dot 257 will cause only the next scanline to be drawn from left nametable → can cause visible glitch, can also interfere with sprite 0 hit for scanline. Glitch has no effect in horizontal or 1-screen mirroring. Only writes that start on dot 257 and continue through dot 258 can cause glitch; any other horizontal timing is safe. Glitch specifically writes value of open but to reg, which will almost always be the upper byte of the address. Writing to the reg or mirror of reg at $2100 according to desired nametable appears to be a functional workaround.
 * Mask:
-	* Bit 0:
-	* Bit 1:
-	* Bit 2: 
-	* Bit 3: 
-	* Bit 4: 
-	* Bit 5: 
-	* Bit 6: 
-	* Bit 7: 
-
-
-
+	* Bit 0: Greyscale (0: normal, 1: greyscale)
+	* Bit 1: 1: Show background in leftmost 8 pixels of screen; 0: Hide.
+	* Bit 2: 1: Show sprites in leftmost 8 pixels of screen; 0: Hide.
+	* Bit 3: 1: Show background
+	* Bit 4: 1: Show sprites
+	* Bit 5: Emphasize red (green on PAL/Dendy)
+	* Bit 6: Emphasize green (red on PAL/Dendy)
+	* Bit 7: Emphasize blue
+	* NOTES:
+		* Render Control:
+			* Bits 3 & 4 enable rendering of background and sprites, respectively.
+			* Bits 1 & 2 enable rendering of background and sprites in the leftmost 8 pixel columns. Setting these bits to 0 will mask these columns, useful in horizontal scrolling where partial sprites or tiles scroll in from the left.
+			* A value of $1E or %00011110 enable all rendering, with no color effects, value of $00 disables all rendering. usually best practice to write to this reg only in vblank, to prevent partial-frame visual artifacts.
+			* If either bits 3 | 4 is enabled at any time outside of vblank interval the PPU will be making continual use of PPU address and data bus to fetch tiles to render, and fetching sprite data from OAM. To make changes to the PPU memory outside vblank (via $2007), must set both bits (3 & 4) to 0 to disable rendering to prevent conflicts.
+			* Disabling rendering (clearing 3 & 4) during visible part of the frame can be problematic. Can cause corruption of sprite state, which will display incorrect sprite data on next frame. It is perfectly fine to mask out sprites but leave the background on (set 3, clear 4) at any time in the frame.
+			* Sprite 0 hit does not trigger in any area where the background or sprites are hidden.
+		* Color Control:
+			* Bit 0 controls a greyscale mode, causes palette to use only colors from grey column: $00, $10, $20, $30. Implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF, both on display and through black colours like $0F will be replaced by non-black grey $00.
+			* Bits 5, 6 & 7 control color emphasis or tint effect. Emphasis bits are applied independently of bit 0, so will still tint color of grey image.
 * Status:
+	* Bit 0-4: PPU open bus; returns stale PPU bus contents.
+	* Bit 5: Sprite overflow. Intent was for flag to be set when more than 8 sprites appear on a scanline, but hardware bug caused false positives as well as false negatives; [PPU sprite evaluation](https://www.nesdev.org/wiki/PPU_sprite_evaluation). This flag is set during sprite evaluation and cleared at dot 1 of pre-render line.
+	* Bit 6: Sprite 0 Hit. Set when a non-zero pixel of sprite 0 overlaps with a non-zero background pixel; cleared at dot 1 of pre-render line, used for raster timing.
+	* Bit 7: Vertical blank has started (0: not in vblank; 1: in vblank). Set at dot 1 of line 241 (line *after* post-render line); cleared after reading $2002 and at dot 1 of pre-render line.
+	* NOTES:
+		* Reading status reg will clear bit 7 and address latch used by PPUSCROLL and PPUADDR. Does not clear sprite 0 hit or overflow bit.
+		* Once sprite 0 hit flag is set, will not clear until end of next vertical blank. If attempting to use flag for raster timing, important to ensure that the sprite 0 hit check happens outside vblank, otherwise CPU will “leak” through and check will fail. Easiest way is to place an earlier check for bit 6 = 0, which will wait for pre-render scanline to begin.
+		* If using sprite 0 hit to make a bottom scroll bar below a vertically scrolling or freely scrolling playfield, be careful to ensure that tile in playfield behind sprite 0 is opaque.
+		* Sprite 0 hit is not detected at x=255, nor as x=0-7 if the background or sprites are hidden in this area.
+		* [PPU Rendering](https://www.nesdev.org/wiki/PPU_rendering) more info on timing and clearing flags.
+		* Some [Vs. System](https://www.nesdev.org/wiki/Vs._System) PPUs return a constant value in bits 4–0 that the game checks.
 * OAM address:
+	* Write address of OAM to access here.
+	* Values during rendering:
+		* 
+	* OAMADDR precautions:
+		* 
 * OAM data:
 * Scroll:
 * Address:
 * Data:
-* OAM DMA:
+* OAM DMA
 
 Drawing:
 *  
