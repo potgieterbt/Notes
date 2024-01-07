@@ -1,5 +1,11 @@
+Understanding:
+* I think it is best to have a variable that contains the entire screen to be rendered for imgui or sdl2
+* A nametable is a quarter of the render screen and is used for the background, only 2 nametables can be held in memory at once as there is only 2KiB and each one is 1KiB.
+* To be able to render an entire screen with 2 nametables [[#^e76062|mirroring]] is used where the nametable is mirrored to a different part of the screen.
+* There is a way for the CPU to access data from the PPU memory, it is done by writing to an address twice and reading the same address?
+
 Registers:
-* Controller:
+* Controller >:
 	* Bit 0-1: Base nametable address: (0 = $2000; 1 = $2400; 2 = $2800; 3 = $2C00)
 		* Are the most significant bits of the scrolling coordinates, a.k.a. when reached the end of a nametable, must switch to the next one → changing nametable address.
 	* Bit 2: VRAM address increment per CPU read/write of PPUDATA: (0: add 1, going across; 1: add 32, going down)
@@ -15,7 +21,7 @@ Registers:
 		* Setting bit 6 causes PPU to output the lower 4 bits of the palette memory index on the EXT pins for each pixel, since only 4 bits are output background and sprite pixels can't normally be distinguished this way. As EXT pins are grounded on the unmodded NES, setting bit 6 is discouraged as it could damage chip whenever it outputs a non-zero pixel value.
 	* Bit 0 race condition:
 		* Be careful when writing to register when outside of V-Blank if using vertical mirroring or 4-screen VRAM, when write starts on dot 257 will cause only the next scanline to be drawn from left nametable → can cause visible glitch, can also interfere with sprite 0 hit for scanline. Glitch has no effect in horizontal or 1-screen mirroring. Only writes that start on dot 257 and continue through dot 258 can cause glitch; any other horizontal timing is safe. Glitch specifically writes value of open but to reg, which will almost always be the upper byte of the address. Writing to the reg or mirror of reg at $2100 according to desired nametable appears to be a functional workaround.
-* Mask:
+* Mask >:
 	* Bit 0: Greyscale (0: normal, 1: greyscale)
 	* Bit 1: 1: Show background in leftmost 8 pixels of screen; 0: Hide.
 	* Bit 2: 1: Show sprites in leftmost 8 pixels of screen; 0: Hide.
@@ -35,7 +41,7 @@ Registers:
 		* Color Control:
 			* Bit 0 controls a greyscale mode, causes palette to use only colors from grey column: $00, $10, $20, $30. Implemented as a bitwise AND with $30 on any value read from PPU $3F00-$3FFF, both on display and through black colours like $0F will be replaced by non-black grey $00.
 			* Bits 5, 6 & 7 control color emphasis or tint effect. Emphasis bits are applied independently of bit 0, so will still tint color of grey image.
-* Status:
+* Status <:
 	* Bit 0-4: PPU open bus; returns stale PPU bus contents.
 	* Bit 5: Sprite overflow. Intent was for flag to be set when more than 8 sprites appear on a scanline, but hardware bug caused false positives as well as false negatives; [PPU sprite evaluation](https://www.nesdev.org/wiki/PPU_sprite_evaluation). This flag is set during sprite evaluation and cleared at dot 1 of pre-render line.
 	* Bit 6: Sprite 0 Hit. Set when a non-zero pixel of sprite 0 overlaps with a non-zero background pixel; cleared at dot 1 of pre-render line, used for raster timing.
@@ -47,33 +53,41 @@ Registers:
 		* Sprite 0 hit is not detected at x=255, nor as x=0-7 if the background or sprites are hidden in this area.
 		* [PPU Rendering](https://www.nesdev.org/wiki/PPU_rendering) more info on timing and clearing flags.
 		* Some [Vs. System](https://www.nesdev.org/wiki/Vs._System) PPUs return a constant value in bits 4–0 that the game checks.
-* OAM address:
+* OAM address >:
 	* Write address of OAM to access here. Most games just write $00 and use OAMDMA.
 	* Values during rendering:
 		* Reg is set to zero for each of ticks 257-320 (sprite tile loading interval) of pre-render and visible scanlines. Means at end of normal complete rendering frame, reg will always return 0.
 		* If rendering is enabled mid-scanline, consequences of an OAMADDR that was not 0 before OAM sprite evaluation at tick 65 of visible scanline. Value of reg at this tick determines starting address for sprite evaluation for this scanline, can cause sprite at OAMADDR to be treated as it was sprite 0, both sprite-0-hit and priority. If reg is unaligned and does not point to Y position of OAM entry, then what it points to will be reinterpreted as a Y position and following bytes will be reinterpreted. No more sprites will be found once at end of OAM is reached, hiding any sprites before starting OAMADDR.
 	* [OAMADDR precautions](https://www.nesdev.org/wiki/PPU_registers#OAMADDR_precautions)
-* OAM data:
+* OAM data <>:
 	* Write OAM data here, writes will increment OAMADDR after write; reads don’t. Reads during vertical or forced blanking return value from OAM at that address.
 	* **DO NOT write directly to this register in most cases.** Because changes to OAM should normally be made only during vblank, writing through OAMDATA is only effective for partial updates (too slow), and partial writes cause corruption, most games use DMA through OAMDMA.
+	* Reading OAMDATA during rendering will expose internal OAM accesses during sprite evaluation and loading; Micro Machinces does this.
+	* Writes to OAMDATA during rendering (on pre-render line and visible lines 0-239, if rendering enabled) do not modify values in OAM, but do perform a glitchy increment of OAMADDR, bumping only the high 6 bits. Extends to DMA transfers via OAMDMA, since uses writes to $2004. **Probably best to completely ignore writes during rendering.**
+* Scroll >>:
+	* Used to change scroll position, telling PPU which pixel of nametable selected through PPUCTRL should be at top left corner of render screen.
+	* PPUSCROLL takes 2 writes: first is X scroll and second is Y scroll. Whether first or second write tracked by w register, shared with PPUADDR.
+	* Typically register is written to during vblank to make next frame start rendering from desired location, but can be modified during rendering to split screen. Changes made to vertical scroll during rendering only take effect on next frame.
+	* With nametable bits in PPUCTRL, scroll can be thought as 9 bits per component and PPUCTRL must be updated along with PPUSCROLL to fully specify scroll position.
+	* After reading PPUSTATUS to clear w (write latch), write horizontal and vertical offsets to PPUSCROLL just before turning on screen.
+	* [PPUSCROLL setting scroll offsets](PPUSCROLL)
+	* Horizontal offsets range 0-255. Normal vertical offsets range 0-239, values 240-255 cause attributes data at current nametable to be used incorrectly as tile data. PPU normally skips from 239 → 0 of next nametable automatically, so invalid scroll positions only occur if explicitly written.
+	* By changing scroll values here across several frames and writing tiles to newly revealed areas of nametables, can achieve effect of camera panning over large background.
+* Address >>:
 	* 
-* Scroll:
-	* 
-* Address:
-	* a
 	* NOTE:
 		* Access to PPUSCROLL and PPUADDR during screen refresh produces interesting raster effects; starting position of each scanline can be set to any pixel position in nametable memory, see [PPU scrolling](https://www.nesdev.org/wiki/PPU_scrolling).
 	* Palette corruption:
 		* a
 	* Bus conflict:
 		* 
-* Data:
+* Data <>:
 	* a
 	* PPUDATA read buffer (post-fetch):
 		* a
 	* Read conflict with DPCM samples:
 		* 
-* OAM DMA:
+* OAM DMA >:
 
 Drawing:
 *  
@@ -102,12 +116,13 @@ Nametables:
 * Each byte in nametable controls an 8x8 pixel character cell.
 * 30 rows and 32 tiles, rest used by attribute table.
 * 4 logical nametables.
-* NES only has enough VRAM for 2 nametables, therefore mirroring is used:
-	* Vertical:
-	* Horizontal:
-	* One-screen:
-	* Four-screen:
-	* Other:
+* Mirroring: ^e76062
+	* NES only has enough VRAM for 2 nametables, therefore mirroring is used:
+		* Vertical:
+		* Horizontal:
+		* One-screen:
+		* Four-screen:
+		* Other:
 
 Attribute Tables:
 * 64-byte array, 8x8 array, at end of each nametable, controls which palette is assigned to each part of the background.
