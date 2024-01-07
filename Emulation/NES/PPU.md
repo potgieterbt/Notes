@@ -48,14 +48,14 @@ Registers:
 		* [PPU Rendering](https://www.nesdev.org/wiki/PPU_rendering) more info on timing and clearing flags.
 		* Some [Vs. System](https://www.nesdev.org/wiki/Vs._System) PPUs return a constant value in bits 4–0 that the game checks.
 * OAM address:
-	* Write address of OAM to access here.
+	* Write address of OAM to access here. Most games just write $00 and use OAMDMA.
 	* Values during rendering:
-		* 
-	* OAMADDR precautions:
-		* 
+		* Reg is set to zero for each of ticks 257-320 (sprite tile loading interval) of pre-render and visible scanlines. Means at end of normal complete rendering frame, reg will always return 0.
+		* If rendering is enabled mid-scanline, consequences of an OAMADDR that was not 0 before OAM sprite evaluation at tick 65 of visible scanline. Value of reg at this tick determines starting address for sprite evaluation for this scanline, can cause sprite at OAMADDR to be treated as it was sprite 0, both sprite-0-hit and priority. If reg is unaligned and does not point to Y position of OAM entry, then what it points to will be reinterpreted as a Y position and following bytes will be reinterpreted. No more sprites will be found once at end of OAM is reached, hiding any sprites before starting OAMADDR.
+	* [OAMADDR precautions](https://www.nesdev.org/wiki/PPU_registers#OAMADDR_precautions)
 * OAM data:
-	* 
-	* **DO NOT write directly to this register in most cases.**
+	* Write OAM data here, writes will increment OAMADDR after write; reads don’t. Reads during vertical or forced blanking return value from OAM at that address.
+	* **DO NOT write directly to this register in most cases.** Because changes to OAM should normally be made only during vblank, writing through OAMDATA is only effective for partial updates (too slow), and partial writes cause corruption, most games use DMA through OAMDMA.
 	* 
 * Scroll:
 	* 
