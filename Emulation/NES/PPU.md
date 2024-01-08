@@ -74,6 +74,7 @@ Registers:
 	* Horizontal offsets range 0-255. Normal vertical offsets range 0-239, values 240-255 cause attributes data at current nametable to be used incorrectly as tile data. PPU normally skips from 239 → 0 of next nametable automatically, so invalid scroll positions only occur if explicitly written.
 	* By changing scroll values here across several frames and writing tiles to newly revealed areas of nametables, can achieve effect of camera panning over large background.
 * Address >>:
+	* Because CPU and PPU are on separate buses, neither has direct access to each other’s memory. CPU writes to VRAM through pair of registers on PPU by first loading and address into PPUADDR and then writing data repeatedly to PPUDATA. The 16-bit address is written to PPUADDR 1 byte at a time, upper byte first, whether first or second tracked by w register, shared by PPUSCROLL.
 	* 
 	* NOTE:
 		* Access to PPUSCROLL and PPUADDR during screen refresh produces interesting raster effects; starting position of each scanline can be set to any pixel position in nametable memory, see [PPU scrolling](https://www.nesdev.org/wiki/PPU_scrolling).
