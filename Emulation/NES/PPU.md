@@ -204,10 +204,29 @@ OAM:
 	* X-scroll values of 0xF9-0xFF results in parts of sprite past right edge of screen.
 	* Not possible to have sprite partially visible on left side of screen, rather left-clipping through PPUMASK can be used to simulate this.
 * DMA:
+	* Most programs write a copy of OAM womewhere in CPU addressable RAM (often $0200-$02FF) and copy it to OAM each frame using OAMDMA ($4014) register. Writing N to this register causes DMA circuitry inside 2A03/07 to fully initialize the OAM by writting OAMDATA 256 times using successive bytes from starting at address $100* N. CPU is suspended while transferring.
+	* Address range to copy from could lie outside RAM, though only useful for static screens with no animation.
+	* Not counting OAMDMA write tick, above procedure takes 513 CPU cycles (+1 on odd CPU cycles): first one (or two) idle cycles, then 256 pairs of alternating read/write cycles. (comparison: unrolled LDA/SDA loop would usually take 4x longer).
 * Sprite 0 hits:
+	* Sprites are conventionally numbered 0-63. Sprite 0 is sprite controlled by OAM addresses $00-$03, sprite 1 is controlled by $04-$07… sprite 63 is controlled by $FC- $FF.
+	* While PPU is drawing picture, when opaque pixel of sprite 0 overlaps an opaque pixel of background, is sprite 0 hit. PPU detects this condition and sets bit  6of PPUSTATUS to 1 starting at this pixel, letting CPU know how far along PPU is drawing the picture.
+	* Sprite 0 hit doesn’t happen:
+		* If background or sprite rendering is disabled.
+		* At x=0 to x=7 if left-side clipping window is enabled (bit 1-2 of PPUMASK is 0).
+		* At x=255, for obscure reason related to pixel pipeline.
+		* At any pixel where background or sprite pixel is transparent (2-bit color index from CHR pattern is %00).
+		* If sprite 0 hit has already occurred this frame, Bit 6 of PPUSTATUS is cleared to 0 as dot 1 of pre-render line. Means only first sprite 0 hit in frame can be detected.
+	* Sprite 0 hit happens regardless of:
+		* Sprite priority. Sprite 0 can still hit the background behind.
+		* Pixel colors. Only CHR pattern bits are relevant , not actual rendered colors, and any CHR color index except %00 is considered opaque.
+		* The palette. Contents of the palette are irrelevant to sprite 0 hits. e.g. a black (0F) sprite pixel can hit a black ($0F) background as long as neither is the transparent index color index %00.
+		* The PAL PPU blanking on left and right edges at x=0, x=1 and x=254, see [Overscan](https://www.nesdev.org/wiki/Overscan#PAL).
 * Sprite overlapping:
+	* Priority between sprites is determined by their address inside OAM. So a sprite displayed in front of another sprite in a scanline, sprite data that occurs first will overlap any other sprite after it. e.g. when sprites at OAM $0C and $28 overlap, sprite at $0C will appear in front.
 * Internal operation:
+	* 
 * Dynamic RAM decay:
+	* 
 
 Palettes 2C02:
 
