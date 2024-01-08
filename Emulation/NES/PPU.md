@@ -3,6 +3,8 @@ Understanding:
 * A nametable is a quarter of the render screen and is used for the background, only 2 nametables can be held in memory at once as there is only 2KiB and each one is 1KiB.
 * To be able to render an entire screen with 2 nametables [[#^e76062|mirroring]] is used where the nametable is mirrored to a different part of the screen.
 * There is a way for the CPU to access data from the PPU memory, it is done by writing to an address twice and reading the same address?
+* PPU runs 3x faster than CPU, 
+* I think the best way of rendering is to instantly make the render screen rather than copy the PPU exactly by only drawing 1 scanline per tick. Also avoids any of the during render glitches maybe. There may be instructions that may need to run during rendering, need to decide how to deal with this.
 
 Registers:
 * Controller >:
