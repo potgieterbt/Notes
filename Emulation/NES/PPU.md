@@ -75,20 +75,23 @@ Registers:
 	* By changing scroll values here across several frames and writing tiles to newly revealed areas of nametables, can achieve effect of camera panning over large background.
 * Address >>:
 	* Because CPU and PPU are on separate buses, neither has direct access to each other’s memory. CPU writes to VRAM through pair of registers on PPU by first loading and address into PPUADDR and then writing data repeatedly to PPUDATA. The 16-bit address is written to PPUADDR 1 byte at a time, upper byte first, whether first or second tracked by w register, shared by PPUSCROLL.
-	* 
+	* After reading PPUSTATUS to clear w (write latch), write write 16-bit address of VRAM to access, upper byte first. [[PPUADDR]]. Valid addresses are $0000-$3FFF; higher addresses are mirrored down.
 	* NOTE:
 		* Access to PPUSCROLL and PPUADDR during screen refresh produces interesting raster effects; starting position of each scanline can be set to any pixel position in nametable memory, see [PPU scrolling](https://www.nesdev.org/wiki/PPU_scrolling).
-	* Palette corruption:
-		* a
+	* [Palette corruption](https://www.nesdev.org/wiki/PPU_registers#Palette_corruption)
 	* Bus conflict:
-		* 
+		* During raster effects, if second write to PPUADDR happens at specific times, at most one axis of scrolling will be set to bitwise AND of written value and current value. Only safe time to finish the second write is during blanking, see [PPU scrolling](https://www.nesdev.org/wiki/PPU_scrolling) for specific timings.
 * Data <>:
-	* a
+	* VRAM read/write data register. After access, VRAM address will increment by amount determined by bit 2 of $2000.
+	* When screen is turned off by disabling rendering flags with PPUMASK or during vblank, you can read or write data from VRAM through this port. Since accessing outside vertical or forced blanking because it will cause graphical glitches and if writing, write to an unpredictable address in VRAM. However, two games are know to [read from PPUDATA during rendering](https://www.nesdev.org/wiki/Reading_2007_during_rendering), See [tricky to emulate games](https://www.nesdev.org/wiki/Tricky-to-emulate_games).
+	* VRAM reading and writing shares the same internal address register that rendering uses. After loading data into video memory, program should reload scroll position afterwards with PPUSCROLL and PPUCTRL (bits 1…0) writes in order to avoid wrong scrolling.
 	* PPUDATA read buffer (post-fetch):
-		* a
-	* Read conflict with DPCM samples:
+		* When reading PPUDATA while the VRAM address in the range 0-$3EFF (before palettes), read will return contents of internal read buffer. Read buffer is updated on every PPUDATA read, only after the previous PPUDATA read, but only after previous contents have been returned to CPU. Because PPU bus reads are too slow and cannot be complete in time to service the CPU read. Because of this after the VRAM address has been set through PPUADDR, one should first read PPUDATA to prime read buffer (ignoring result) before then reading desired data from it.
 		* 
+	* Read conflict with DPCM samples:
+		* If currently playing DPCM samples, chance that an interruption from APU’s sample fetch will cause extra read cycle if it happened at same time as instruction that read $2007. Will cause an extra increment and a byte to be skipped over, corrupting data being read. [APU DMC](https://www.nesdev.org/wiki/APU_DMC#Conflict_with_controller_and_PPU_read).
 * OAM DMA >:
+	* Port is located on CPU. Writing $XX will upload 256 bytes of data from CPU page $XX00- $XXFF to internal PPU OAM. Page is typically located in internal RAM, commonly $0200-$02FF, but cartridge RAM or ROM can be used as well.
 
 Drawing:
 *  
