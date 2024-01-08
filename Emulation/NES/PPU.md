@@ -87,11 +87,26 @@ Registers:
 	* VRAM reading and writing shares the same internal address register that rendering uses. After loading data into video memory, program should reload scroll position afterwards with PPUSCROLL and PPUCTRL (bits 1…0) writes in order to avoid wrong scrolling.
 	* PPUDATA read buffer (post-fetch):
 		* When reading PPUDATA while the VRAM address in the range 0-$3EFF (before palettes), read will return contents of internal read buffer. Read buffer is updated on every PPUDATA read, only after the previous PPUDATA read, but only after previous contents have been returned to CPU. Because PPU bus reads are too slow and cannot be complete in time to service the CPU read. Because of this after the VRAM address has been set through PPUADDR, one should first read PPUDATA to prime read buffer (ignoring result) before then reading desired data from it.
-		* 
+		* Some PPUs support reading palette data from $3F00-$3FFF.
+			* Reads work differently, palette RAM is separate memory space internal to PPU that is overlaid onto PPU address space.
+			* Referenced 6-bit palette data is returned immediately instead of going to internal read buffer, and hence no priming read is required.
+			* Simultaneously the PPU also performs a normal read from PPU memory at specified address, underneath the palette data and result of this read goes into read buffer as normal.
+			* Old contents of read buffer are discarded when reading palettes, but changing the address to point outside palette RAM and performing one read, contents of this shadowed memory (usually mirrored nametables) can be accessed.
+			* On PPUs that do not support reading palette RAM, this memory range behaves the same as the rest of PPU memory.
+		* Internal read buffer is updated only on PPUDATA reads. Not affected by other PPU processes like rendering, maintains its value indefinitely until next read.
 	* Read conflict with DPCM samples:
 		* If currently playing DPCM samples, chance that an interruption from APU’s sample fetch will cause extra read cycle if it happened at same time as instruction that read $2007. Will cause an extra increment and a byte to be skipped over, corrupting data being read. [APU DMC](https://www.nesdev.org/wiki/APU_DMC#Conflict_with_controller_and_PPU_read).
 * OAM DMA >:
 	* Port is located on CPU. Writing $XX will upload 256 bytes of data from CPU page $XX00- $XXFF to internal PPU OAM. Page is typically located in internal RAM, commonly $0200-$02FF, but cartridge RAM or ROM can be used as well.
+	* CPU is suspended during the transfer, will take 513 or 514 cycles after $4014 write tick. (1 wait state cycle while waiting for writes to complete, +1 if on a put cycle, then 256 alternating get/put cycles. See [DMA](https://www.nesdev.org/wiki/DMA))
+	* OAM DMA is the only effective method for initializing all 256 bytes of OAM. Because of the decay of OAM’s dynamic RAM when rendering is disabled, initialization should take place within vblank. Writes through OAMDATA are generally too slow for this task.
+	* DMA transfer will begin at current OAM write address. It is common practice to initialize it to 0 with a write to OAMADDR before DMA transfer. Different starting addresses can be used for a simple OAM cycling technique, to alleviate sprite priority conflicts by flickering. If using this technique, after DMA OAMADDR should be set to 0 before the end of vblank to prevent potential OAM corruption. However due to OAMADDR writes also having a corruption effect, this technique is not recommended.
+
+The PPU also has 4 internal registers, described in detail on PPU scrolling:
+* v: During rendering, used for the scroll position. Outside of rendering, used as the current VRAM address.
+* t: During rendering, specifies the starting coarse-x scroll for the next scanline and the starting y scroll for the screen. Outside of rendering, holds the scroll or VRAM address before transferring it to v.
+* x: The fine-x position of the current scroll, used during rendering alongside v.
+* w: Toggles on each write to either PPUSCROLL or PPUADDR, indicating whether this is the first or second write. Clears on reads of PPUSTATUS. Sometimes called the 'write latch' or 'write toggle'.
 
 Drawing:
 *  
