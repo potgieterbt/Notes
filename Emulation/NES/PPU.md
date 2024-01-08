@@ -110,8 +110,23 @@ The PPU also has 4 internal registers, described in detail on PPU scrolling:
 * x: The fine-x position of the current scroll, used during rendering alongside v.
 * w: Toggles on each write to either PPUSCROLL or PPUADDR, indicating whether this is the first or second write. Clears on reads of PPUSTATUS. Sometimes called the 'write latch' or 'write toggle'.
 
-Drawing:
-*  
+Rendering:
+* Timing:
+	* Pre-render:
+	* Visible:
+		* Cycle 0:
+		* Cycles 1-256:
+		* Cycles 257-320:
+		* Cycles 321-336:
+		* Cycles 337-340:
+	* Post-render scanline (240):
+	* Vertical blanking lines (241-260):
+
+NMI:
+* 
+
+Scrolling:
+* 
 
 Read/Write of PPU:
 *  
@@ -139,11 +154,20 @@ Nametables:
 * 4 logical nametables.
 * Mirroring: ^e76062
 	* NES only has enough VRAM for 2 nametables, therefore mirroring is used:
-		* Vertical:
-		* Horizontal:
-		* One-screen:
-		* Four-screen:
-		* Other:
+		* Vertical: $2000 equals $2800 and $2400 equals 2C00 (e.g. Super Mario Bros.)
+		* Horizontal: $2000 equals $2400 and $2800 equals $2C00 (e.g. Kid Icarus)
+		* One-screen: All nametables refer to the same memory at any given time, and mapper directly manipulates CIRAM address bit 10.
+		* Four-screen: CIRAM is disabled and cartridge contains additional VRAM used for all 4 nametables.
+		* Other: Some advanced mappers can present arbitrary combinations of CIRAM, VRAM or CHR ROM in nametable area. Rarely used.
+* Background evaluation:
+	* Conceptually, the PPU does this 33 times for each scanline:
+
+		1. Fetch a nametable entry from $2000-$2FBF.
+		2. Fetch the corresponding attribute table entry from $23C0-$2FFF and increment the current VRAM address within the same row.
+		3. Fetch the low-order byte of an 8x1 pixel sliver of pattern table from $0000-$0FF7 or $1000-$1FF7.
+		4. Fetch the high-order byte of this sliver from an address 8 bytes higher.
+		5. Turn the attribute data and the pattern table data into palette indices, and combine them with data from sprite data using priority.
+	* It also does a fetch of a 34th (nametable, attribute, pattern) tuple that is never used, but some mappers rely on this fetch for timing purposes.
 
 Attribute Tables:
 * 64-byte array, 8x8 array, at end of each nametable, controls which palette is assigned to each part of the background.
@@ -185,7 +209,7 @@ OAM:
 * Internal operation:
 * Dynamic RAM decay:
 
-Palettes:
+Palettes 2C02:
 
 
 Memory Map:
