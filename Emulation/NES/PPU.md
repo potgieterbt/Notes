@@ -5,7 +5,7 @@ Understanding:
 * There is a way for the CPU to access data from the PPU memory, it is done by writing to an address twice and reading the same address?
 * PPU runs 3x faster than CPU, 
 * I think the best way of rendering is to instantly make the render screen rather than copy the PPU exactly by only drawing 1 scanline per tick. Also avoids any of the during render glitches maybe. There may be instructions that may need to run during rendering, need to decide how to deal with this.
-* When doing the sprite evaluation, I think the tile for the background is held in memory and is then compared to the sprite, I think it happens like this 
+* When doing the sprite evaluation, I think the tile for the background is held in memory and is then compared to the sprite, I think it happens like this because this would ensure that there is only one pass when rendering.
 
 Registers:
 * Controller >:
