@@ -6,6 +6,7 @@ Understanding:
 * PPU runs 3x faster than CPU, 
 * I think the best way of rendering is to instantly make the render screen rather than copy the PPU exactly by only drawing 1 scanline per tick. Also avoids any of the during render glitches maybe. There may be instructions that may need to run during rendering, need to decide how to deal with this.
 * When doing the sprite evaluation, I think the tile for the background is held in memory and is then compared to the sprite, I think it happens like this because this would ensure that there is only one pass when rendering.
+* [Reddit: understanding ppu](https://www.reddit.com/r/EmuDev/comments/evu3u2/what_does_the_nes_ppu_actually_do/)
 
 Registers:
 * Controller >:
