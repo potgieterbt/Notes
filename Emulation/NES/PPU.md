@@ -225,7 +225,7 @@ OAM:
 * Sprite overlapping:
 	* Priority between sprites is determined by their address inside OAM. So a sprite displayed in front of another sprite in a scanline, sprite data that occurs first will overlap any other sprite after it. e.g. when sprites at OAM $0C and $28 overlap, sprite at $0C will appear in front.
 * Internal operation:
-	* In addition to primary OAM memory, PPU
+		* In addition to primary OAM memory, PPU
 * Dynamic RAM decay:
 	* 
 
