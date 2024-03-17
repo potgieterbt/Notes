@@ -1,5 +1,13 @@
-c++
-Rust
-Zig
-Carbon
-golang
+Low-Level:
+* C++
+* Rust
+* Zig
+* C
+
+Higher-Level:
+* Golang
+* TypeScript
+
+Scripting:
+* Bash
+* Lua
