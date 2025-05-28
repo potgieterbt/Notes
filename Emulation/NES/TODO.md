@@ -1,0 +1,1 @@
+- [ ] Check whether BRK, RTI, DEC,  function works corrently

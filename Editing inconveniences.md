@@ -1,2 +1,2 @@
-* zsh completions need to use arrow keys.
-* nvim lsp completion requires arrow keys
+1. Can't use vim movements in zsh to change commands
+2. 

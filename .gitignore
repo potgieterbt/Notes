@@ -2,3 +2,9 @@
 .git/
 .stfolder/
 .stversions/
+
+
+
+
+# Ignore Smart Connections folder
+.smart-connections

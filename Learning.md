@@ -1,2 +1,0 @@
-[[Languages]]
-[[Emulation/Emulation]]
