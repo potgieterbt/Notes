@@ -1,0 +1,2 @@
+
+"smart_sources:Emulation/NES.md": {"path":"Emulation/NES.md","last_embed":{"hash":null},"embeddings":{},"last_read":{"hash":"13exdzg","at":1749829083409},"class_name":"SmartSource","last_import":{"mtime":1718107098120,"size":1184,"at":1749829083433,"hash":"13exdzg"},"blocks":{"#":[1,17]},"outlinks":[{"title":"6502","target":"6502","line":15},{"title":"PPU_old","target":"PPU_old","line":16}]},

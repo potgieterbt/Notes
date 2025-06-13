@@ -1,0 +1,2 @@
+
+"smart_sources:Emulation/Understanding RPCSX/amdgpu.md": {"path":"Emulation/Understanding RPCSX/amdgpu.md","last_embed":{"hash":null},"embeddings":{},"last_read":{"hash":"1os2n8d","at":1749829083409},"class_name":"SmartSource","last_import":{"mtime":1709498717057,"size":118,"at":1749829083433,"hash":"1os2n8d"},"blocks":{"#":[1,5]},"outlinks":[{"title":"Source","target":"https://github.com/RPCSX/rpcsx/tree/master/hw/amdgpu","line":1}]},
