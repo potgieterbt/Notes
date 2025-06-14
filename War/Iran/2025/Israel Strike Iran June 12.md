@@ -55,4 +55,10 @@
 	* **Ali Shadmani** was the Khatam ol Anbia Central Headquarters coordination deputy before Khamenei appointed him to command the headquarters. Coordination deputies in Iran are roughly equivalent to a chief of staff in the US military. Shadmani spent his career commanding different units in the IRGC Ground Forces before going to the headquarters. CTP-ISW previously identified Shadmani as a rising figure in the military establishment, as influential military figures appeared to favor and empower him.
 
 [[Iran Nuclear Strikes, June 14, 2025 PDF]]
-* 
+* Iran used significantly fewer munitions in its response than originally planned because the IDF destroyed and damaged missile launcher and silos.
+* IDF has continued to strike Iranian air defence systems to maintain air superiority over Iran.
+* Iran has conducted 6 waves of ballistic missile attacks targeting Israel. At least 10 interceptors, shrapnel or ballistic missiles struck Tel Aviv area causing damage to high-rise buildings, over 60 injuries and one death.
+* Iran originally planned to use 1000 ballistic missiles to attack Israel(2 IRGC members told NYT) only launched 200 in six waves.
+* Iran has also launched at least two waves of attack drones targeting Israel. A missile impact south of Tel Aviv in Rishon LeZion killed two Israeli civilians, injuring 20 and killed two civilians. IDF says that air defences did not intercept at least 10 out of the 200 ballistic missiles on trajectory to hit populated areas.
+* IDF reportedly struck several Iranian military sites including: naval base near Abadan, Khuzestan Province, a 216th Armored Brigade ammunition depot in Zanjan, Zanjan Province and an IRGC missile base in Kermanshah.
+* Israel assessed that Iran could have an arsenal of 8000 ballistic missiles within two years according to unspecified Israeli intelligence official speaking to Fox News journalist.
