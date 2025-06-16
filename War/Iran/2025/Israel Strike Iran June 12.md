@@ -82,7 +82,10 @@
 * IDF sources told Israeli media that the IDF conducted strikes in Yemen in and attempted targeted attack on Ghamari(Houthi Chief of Staff, oversees Houthi military operations and directing procurement and deployment of weapons). Houthis have not confirmed or commented on the strike.
 
 [[Iran Update Special Edition Israeli Strikes on Iran, June 15, 2025, Morning Edition (PDF)]]
+* US weapons expert reported on June 15 that if Israel does not render Fordow Fuel Enrichment Plant(FFEP) inoperable, Iran would be able to produce enough weapon-grade uranium for nine nuclear weapons by the end of the first month using pre-attack 60% enriched uranium stockpile.
 * 
 
 [[Iran Update Special Edition Israeli Strikes on Iran, June 15, 2025 Evening Edition (PDF)]]
-* 
+* IDF expands air campaign into Iran by beginning to strike regime institutions, including some related to internal security and social control. The degradation of Iranian coercive apparatus coupled with energy shortages could destabilize the regime.
+* IDF conducted furthest strike eastward as part of its efforts to establish air superiority. IDF struck an Artesh airbase around Mashhad in northeastern Khorasan Razavi Province.
+* Iran have launched 10 total barrages. IDF have intercepted around 92% of missiles according to Israeli official speaking to Reuters.
