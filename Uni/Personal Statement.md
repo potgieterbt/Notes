@@ -7,7 +7,5 @@ I did work experience at Vodafone where I learnt a lot about the many fields tha
 6502 and chip8 emulator
 Operating system in 1000 lines on c
 Completed a lexer and parser in Zig
-
 Develop tools that help people, Ensure that the programs I write are the best.
-
 Video game preservation, 
